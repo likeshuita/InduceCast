@@ -141,9 +141,9 @@ class TCN(nn.Module):
         return x
 
 
-class BAnet(nn.Module):
+class InduceCast(nn.Module):
     def __init__(self, a_sparse, seq=12, kcnn=2, k=6, m=2, walk_length=5):
-        super(BAnet, self).__init__()
+        super(InduceCast, self).__init__()
         self.feature = seq
         self.seq = seq - kcnn + 1
         self.alpha = 0.5
@@ -179,12 +179,10 @@ class BAnet(nn.Module):
             set_dim=32
         )
 
-        # 特征投影层，对应论文公式12和13
         self.feature_proj1 = nn.Linear(in_features=self.seq, out_features=self.seq)
         self.feature_proj2 = nn.Linear(in_features=self.seq, out_features=self.seq)
 
-        # TCN与全连接层
-        num_channels = [m, m]  # 两层TCN
+        num_channels = [m, m]
         self.tcn = TCN(
             num_inputs=m,
             num_channels=num_channels,
